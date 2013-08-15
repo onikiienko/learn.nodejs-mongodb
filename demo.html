@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset='utf-8'>
+
+    <title>DGEntrance demo</title>
+
+    <script src="http://maps2.bogdan.test/2.0/loader.js?pkg=full&mode=debug"></script>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+
+</head>
+
+<body>
+
+
+
+<div id="map" style="width: 100%; height: 300px; border: 1px solid #ccc;"></div>
+
+
+
+
+
+
+
+<input class="btn" type="button" value="Найти вход в Спарк-Авто" id="sparkAutoEntrance" />
+
+<input class="btn" type="button" value="Найти вход в ГУМ" id="gumEntrance" />
+
+<input class="btn" type="button" value="Найти вход в стройку" id="buildingEntrance" />
+
+<div id = "buttons"></div>
+
+
+
+<script type="text/javascript">
+    $.getJSON('http://catalog.api.2gis.ru/2.0/search?rubric=%D0%B1%D0%B0%D1%80%D1%8B&where=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D0%B8%D0%B1%D0%B8%D1%80%D1%81%D0%BA&page_size=50&type=filial&key=1', function(result) {
+        for(var i = 0; i == length(result); i++){
+            buttons.innerHTML += '<input class="btn" type="button" value="'+result.result.data[i].id+'" id="'+result.result.data[i].id+'" />';
+        }
+    });
+    var map,
+
+            balloonHTML,
+
+            btns = [
+
+                //document.getElementById('dgEntrance'),
+
+                document.getElementById('sparkAutoEntrance'),
+
+                document.getElementById('gumEntrance'),
+
+                document.getElementById('buildingEntrance')
+
+            ];
+
+
+
+    L.onLoad(function () {
+
+        for (var i = 0; i < btns.length; i++) {
+
+            btns[i].onclick = addEntrance;
+
+        };
+
+
+
+        map = new L.Map('map', {
+
+            center: [54.980206086231, 82.898068362003],
+
+            zoom: 18
+
+        });
+
+
+
+
+        var entrances = {
+
+
+
+            'dgEntrance': new L.DG.Entrance({
+
+                "vectors": ["LINESTRING(82.89850294589996 54.97985176538553, 82.89841711521149 54.97989794209166)"],
+
+                "fitBounds": false
+
+            }),
+
+
+
+            'sparkAutoEntrance': new L.DG.Entrance({
+
+                "vectors": [
+
+                    "LINESTRING(82.8987067937851 54.97971323494846, 82.89879262447357 54.979667058029875)",
+
+                    "LINESTRING(82.89904475212097 54.97952237000778, 82.89896428585052 54.97956854709275)"
+
+                ]
+
+            }),
+
+
+
+            'gumEntrance': new L.DG.Entrance({
+
+                "vectors": [
+
+                    "LINESTRING(82.8974461555481 54.9816433826377, 82.89768755435944 54.98177574981275, 82.89783239364624 54.9816957138986, 82.89774119853973 54.98164030432612)"
+
+                ]
+
+            }),
+
+
+
+            'buildingEntrance': new L.DG.Entrance({
+
+                "vectors": [
+
+                    "LINESTRING(82.89892673492432 54.98161567782492, 82.89850294589996 54.98136633364934, 82.89860486984253 54.98131400195911)"
+
+                ]
+
+            })
+
+
+
+        }
+
+
+
+        function addEntrance() {
+
+            var entrance = entrances[this.id];
+
+            entrance.addTo(map).show();
+
+        }
+
+    });
+
+    /**
+
+     * TODO:
+
+     * - отключить анимацию для старых версий Opera и включить для Opera Next. Fixed.
+
+     * - применить fadeIn()/fadeOut(). Убил 2 часа, безрезультатно, наконечник не fadeIn-ится.
+
+     * - давать возможность отключать fitBounds и дать эту возможность, если нужно. Fixed.
+
+     * - пофиксить SVG-описание для ИЕ9, 10. Fixed.
+
+     * - проверить на мобильных. Отключить фичу там, где не работает.
+
+     * - пофиксить в Safari
+
+     * - сформировать pull request в Leaflet
+
+     */
+
+
+
+</script>
+
+</body>
+
+</html>

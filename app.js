@@ -1,11 +1,19 @@
-var bd = require('./bd')
-var reading = require('./index');
-var http = require("http");
+var MongoClient = require('mongodb').MongoClient;
 
+MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) { 
 
-http.createServer(function(request, response) {
-    response.writeHead(200, {"Content-Type": "text/plain"});
-    for(i in reading.result){response.write(''+reading.result[i]);}
-    response.end();
-}).listen(8888);
+	if (err) throw err;
 
+	db.collection('coll').findOne({}, function(err, doc) {
+
+		if(err) throw err;
+
+		console.dir(doc);
+
+		db.close();
+
+	});
+
+	console.dir("Called findOne!");
+
+})
