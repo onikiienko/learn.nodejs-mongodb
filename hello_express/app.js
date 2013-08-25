@@ -19,6 +19,10 @@ app.get('/', function (req, res) {
 	});
 });
 
+function writeInDB(value){
+	db.collection('coll').insert(value);
+}
+
 app.get('*', function (req, res) {
 	res.send("Page not found!", 404)
 });
