@@ -31,18 +31,15 @@ MongoClient.connect('mongodb://localhost:27017/course', function(err, db) {
 	var cursor = grades.findOne(query, callback);
 	var query = {'assigment' : 'hw2'};
 	function callback(err, doc) {
+		
 		if(err) {
 			console.log(err.message); 
 			return db.close();
 		}
-		if(!doc) {
-			console.log('No documet found!'); 
-			return db.close();
-		}
-		query['_id'] = doc['_id'];
+		
 		doc['date_returned'] = new Date();
 
-		grades.update(query, doc, function(err, updated) {
+		grades.save(doc, function(err, updated) {
 		if(err) throw err.message;
 
 		console.dir('We just updated: ' + updated);
